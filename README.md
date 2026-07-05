@@ -115,7 +115,7 @@ Design Studio 是一个本地 Skill，不需要上传到任何插件市场。直
 
 ```bash
 # 克隆到 Claude Code 的用户技能目录，所有项目都可以使用
-git clone https://github.com/<your-org>/design-studio.git /tmp/design-studio
+git clone https://github.com/daibitx/Design-Studio.git /tmp/design-studio
 cp -r /tmp/design-studio/skills/design-studio ~/.claude/skills/design-studio
 ```
 
@@ -125,7 +125,7 @@ cp -r /tmp/design-studio/skills/design-studio ~/.claude/skills/design-studio
 # 在目标项目根目录下执行
 cd /path/to/your-project
 mkdir -p .claude/skills
-git clone https://github.com/<your-org>/design-studio.git /tmp/design-studio
+git clone https://github.com/daibitx/Design-Studio.git/tmp/design-studio
 cp -r /tmp/design-studio/skills/design-studio .claude/skills/design-studio
 ```
 
