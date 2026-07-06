@@ -114,9 +114,10 @@ Design Studio 是一个本地 Skill，不需要上传到任何插件市场。直
 ### 方法一：Git Clone 到用户技能目录（推荐，全局可用）
 
 ```bash
-# 克隆到 Claude Code 的用户技能目录，所有项目都可以使用
+if (Test-Path /tmp/design-studio) { Remove-Item -Recurse -Force /tmp/design-studio }
 git clone https://github.com/daibitx/Design-Studio.git /tmp/design-studio
-cp -r /tmp/design-studio/skills/design-studio ~/.claude/skills/design-studio
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force ` "/tmp/design-studio/skills/design-studio" ` "$HOME\.claude\skills\"
 ```
 
 ### 方法二：Git Clone 到项目内（仅当前项目可用）
