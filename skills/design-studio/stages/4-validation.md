@@ -92,7 +92,13 @@ Why it matters: [Engineering rationale — not just "it's different"]
 Suggestion: [Direction, not implementation. "Consider extracting X because..." not "Replace lines 10-45 with..."]
 ```
 
-### Step 5: Prioritize
+### Step 5: Write the Validation Report to File
+
+Write the report to `docs/designs/<design-name>/validation-report.md`. Snapshot to `docs/designs/<design-name>/history/YYYY-MM-DD-validation-report.md`.
+
+Update `docs/designs/INDEX.md` if this validation completes the design cycle.
+
+### Step 6: Prioritize
 
 Not all findings are equal. Rank by impact:
 

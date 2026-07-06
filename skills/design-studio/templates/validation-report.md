@@ -1,6 +1,6 @@
-# Validation Report
+# Validation Report: <design-name>
 
-> Template — design-to-implementation alignment review.
+> Validation Stage artifact. Saved to `docs/designs/<design-name>/validation-report.md`. Design-to-implementation alignment review.
 
 ---
 

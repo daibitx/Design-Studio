@@ -115,6 +115,12 @@ Before we move to Planning:
 Once you're satisfied, I'll break this into an implementation plan.
 ```
 
+### Step 6: Write the Design Specification
+
+When the developer approves the design, write it to `docs/designs/<design-name>/design-spec.md`. Then snapshot a copy to `docs/designs/<design-name>/history/YYYY-MM-DD-design-spec.md`.
+
+Update `docs/designs/INDEX.md` to reflect the new stage and status.
+
 ## Design Decision Documentation
 
 Every significant design decision must be documented with this structure:

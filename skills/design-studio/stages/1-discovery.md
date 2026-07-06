@@ -143,6 +143,8 @@ After **every exchange**, update the relevant section of the Design Context (`te
 
 Don't wait until the end of Discovery to capture decisions. Capture them as they crystallize.
 
+**Write the Design Context to file** at `docs/designs/<design-name>/design-context.md` after the first exchange (prompt the developer for the design name if not yet established). Update the file after each significant round.
+
 ### Step 5: Know When Discovery Is Complete
 
 Discovery is done when you've worked through every dimension of the Boundary Checklist and:

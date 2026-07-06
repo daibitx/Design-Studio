@@ -1,20 +1,19 @@
-# Design Context
+# Design Context: <design-name>
 
-> Living document — updated continuously throughout the session. This is the project's shared source of truth.
+> Living document — updated continuously throughout the session. This design's shared source of truth. Saved to `docs/designs/<design-name>/design-context.md`.
+
+---
+
+## Current Stage
+
+**Stage:** Discovery <!-- Discovery | Design | Planning | Validation -->
+**Status:** 🔄 In Progress <!-- 🔄 In Progress | ⏸️ Paused | ✅ Complete -->
 
 ---
 
 ## Current Objective
 
 <!-- What are we trying to achieve right now? One paragraph. -->
-
----
-
-## Current Stage
-
-<!-- Discovery | Design | Planning | Validation -->
-
-**Stage:** Discovery
 
 ---
 
@@ -99,6 +98,18 @@
 | Term | Definition |
 |---|---|
 | | |
+
+---
+
+## Related Designs
+
+<!-- Links to parent, children, or sibling designs in the same repo -->
+
+| Relation | Design |
+|---|---|
+| Parent | [parent-design](../) |
+| Child | [child-design](../child-design/) |
+| Sibling | [other-design](../other-design/) |
 
 ---
 

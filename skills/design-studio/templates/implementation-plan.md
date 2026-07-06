@@ -1,6 +1,6 @@
-# Implementation Plan
+# Implementation Plan: <design-name>
 
-> Template — roadmap derived from the Design Specification.
+> Planning Stage artifact. Saved to `docs/designs/<design-name>/implementation-plan.md`. Roadmap derived from the Design Specification.
 
 ---
 

@@ -1,6 +1,6 @@
-# Design Specification
+# Design Specification: <design-name>
 
-> Template — fill in sections appropriate to project scope. Delete sections that don't apply.
+> Design Stage artifact. Saved to `docs/designs/<design-name>/design-spec.md`. Fill in sections appropriate to project scope. Delete sections that don't apply.
 
 ---
 

@@ -96,6 +96,7 @@ design-studio/
 │   ├── 3-planning.md              ← Deep guidance for roadmap creation
 │   └── 4-validation.md            ← Deep guidance for design review
 ├── templates/
+│   ├── INDEX.md                   ← Design index template
 │   ├── design-context.md          ← Living document template
 │   ├── design-spec.md             ← Design Specification template
 │   ├── implementation-plan.md     ← Implementation Plan template
@@ -139,17 +140,50 @@ design-studio/
 
 ## Design Context — The Living Document
 
-Every Design Studio session maintains a **Design Context**, structured per `templates/design-context.md`. This is the project's shared source of truth.
+Every Design Studio session maintains a **Design Context**, structured per `templates/design-context.md` and saved to `docs/designs/<design-name>/design-context.md`. This is the design's shared source of truth.
 
 After every significant exchange, update the Design Context. The developer should always be able to ask "where are we?" and get a clear answer.
 
+When a design name hasn't been established yet, ask the developer to name it before writing files.
+
 ---
+
+## Output File Structure
+
+Design Studio writes artifacts to `docs/designs/` in the project repository. One folder per design, supporting multiple independent designs, nested sub-modules, and sequential iterations.
+
+```
+docs/designs/
+├── INDEX.md                              # All designs at a glance
+│
+├── <design-name>/                        # One design = one folder (kebab-case)
+│   ├── design-context.md                 # Living document — continuously updated
+│   ├── design-spec.md                    # Design Stage artifact
+│   ├── implementation-plan.md            # Planning Stage artifact
+│   ├── validation-report.md              # Validation Stage artifact
+│   └── history/                          # Milestone snapshots (manual trigger)
+│       └── 2026-07-06-design-spec.md
+│
+└── <parent-design>/                      # Nested hierarchy for sub-modules
+    └── <child-module>/
+        ├── design-context.md
+        ├── design-spec.md
+        └── ...
+```
+
+**Conventions:**
+
+- **Folder naming:** kebab-case, matching the design name used in conversations
+- **Artifact files:** always the same four names (`design-context.md`, `design-spec.md`, `implementation-plan.md`, `validation-report.md`)
+- **Hierarchy:** parent/child expressed through folder nesting, cross-linked in `design-context.md` → Related Designs
+- **History:** snapshot key artifacts to `history/YYYY-MM-DD-<name>.md` at stage-completion milestones; git history covers the rest
+- **INDEX.md:** updated at every stage transition to reflect current status
 
 ## Output Standards
 
 All Design Studio outputs should be:
 
-- **Structured** — Use templates; don't invent formats
+- **Structured** — Use templates; don't invent formats. Write to the file paths above.
 - **Actionable** — Someone should be able to act on it without asking "what does this mean?"
 - **Traceable** — Every decision should link back to a requirement, constraint, or principle
 - **Scoped** — Match detail level to the requested scope (module ≠ system)

@@ -93,6 +93,12 @@ Output using `templates/implementation-plan.md`. The plan should be:
 - **Flexible** — Dependencies are explicit so reordering is possible
 - **Grounded** — Every task traces back to a design requirement
 
+### Step 7: Write the Implementation Plan
+
+When the developer confirms the plan, write it to `docs/designs/<design-name>/implementation-plan.md`. Then snapshot a copy to `docs/designs/<design-name>/history/YYYY-MM-DD-implementation-plan.md`.
+
+Update `docs/designs/INDEX.md` to reflect the new stage and status.
+
 ## Parallelism Guidance
 
 Mark tasks that can run in parallel:
