@@ -57,37 +57,130 @@ Use `templates/design-spec.md` as the base structure. Fill in sections appropria
 | Error Handling | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | Security Considerations | ✓ | ✓ | ✓ | — | ✓ | ✓ |
 
-### Step 3: Generate Design-Oriented Code
+### Step 3: Embed Code Design Throughout the Spec
 
-When code clarifies design intent, use only these forms:
+**This is not a separate step.** Code-level design must be woven into every relevant section of the specification. A spec that describes behavior only in prose and tables is incomplete — it forces the implementer to translate requirements into interfaces and types from scratch.
+
+#### The Rule
+
+**Every section that describes behavior MUST include corresponding code contracts.** The spec should answer not just "what does it do?" but "what does it look like in code?"
+
+#### Section → Code Form Mapping
+
+| Spec Section | Must Include | Optional (when clarifying) |
+|---|---|---|
+| Module Design | Public interfaces (full method signatures), DTOs/records with typed fields | DI registration snippet, constructor dependency list |
+| API Design | Request/response DTOs, endpoint method signatures, error code enums | Auth attribute declarations |
+| Data Model | Entity classes/records with field types + constraints, relationship navigation properties | Migration notes, index declarations |
+| State Machines | State enums, transition table as code, `IStateMachine<TState, TEvent>` interface | Guard condition signatures |
+| Sequence Flows | Key orchestrating method pseudocode (no bodies, just call order + data flow) | Concurrency primitive declarations |
+| Error Handling | Error DTO/record hierarchy, error code enums, `Result<T>` or exception type tree | Retry policy pseudocode |
+| Security | Permission code constants, auth attribute usage pattern | Token validation flow pseudocode |
+
+#### Language-Aware Examples
+
+Match the code to the developer's stack. Here are patterns for common languages:
+
+**C# / .NET:**
+
+```csharp
+// ✓ Interfaces with full signatures
+public interface ICaptchaService
+{
+    Task<CaptchaDto> GenerateAsync(int width = 300, int height = 150);
+    Task<bool> ValidateAsync(string captchaId, int captchaX, int tolerancePx = 3);
+}
+
+// ✓ DTOs / Records with types
+public record CaptchaDto(string CaptchaId, string BackgroundImage, string SliderImage, int SliderY);
+public record LoginResult(bool Success, string? ErrorMessage, string? AccessToken);
+
+// ✓ Enums for state machines
+public enum LoginState { Idle, Editing, Validating, Authenticating, Authenticated }
+public enum LoginEvent { FormFilled, LoginClicked, ValidationFailed, AuthSuccess, AuthFailed, NetworkError }
+
+// ✓ Pseudocode for orchestration (no bodies)
+async Task<LoginResult> HandleLoginAsync()
+{
+    var captcha = await _captchaService.GenerateAsync();  // GET /api/captcha
+    // ... user fills form + slides captcha ...
+    var token = await _authService.GetTokenAsync(username, password, captcha.Id, captcha.X);
+    if (token is null) return LoginResult.Failed;
+    await _accountStorage.SaveAsync(account);
+    return LoginResult.Success(token);
+}
+
+// ✓ DI registration pattern
+services.AddSingleton<ICaptchaService, CaptchaService>();
+services.AddSingleton<IAccountStorage>(sp => new AccountStorage("accounts.db"));
+```
+
+**TypeScript:**
 
 ```typescript
-// ✓ ALLOWED: Interfaces
-interface PaymentProcessor {
-  process(payment: Payment): Promise<PaymentResult>;
-  refund(transactionId: string): Promise<RefundResult>;
+// ✓ Interfaces
+interface CaptchaService {
+  generate(width?: number, height?: number): Promise<CaptchaDto>;
+  validate(captchaId: string, captchaX: number, tolerancePx?: number): Promise<boolean>;
 }
 
-// ✓ ALLOWED: DTOs / Schemas
-type CreateOrderRequest = {
-  customerId: string;
-  items: OrderItem[];
-  shippingAddress: Address;
-};
-
-// ✓ ALLOWED: Type definitions
-type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
-
-// ✓ ALLOWED: Abstract classes (structure only)
-abstract class EventBus {
-  abstract publish<T extends Event>(event: T): Promise<void>;
-  abstract subscribe<T extends Event>(type: string, handler: EventHandler<T>): Subscription;
-}
-
-// ✗ NOT ALLOWED: Concrete implementations
-// ✗ NOT ALLOWED: Business logic
-// ✗ NOT ALLOWED: Complete classes with method bodies
+// ✓ DTOs
+type CaptchaDto = { captchaId: string; backgroundImage: string; sliderImage: string; sliderY: number; };
+type LoginResult = { success: true; accessToken: string } | { success: false; errorMessage: string };
 ```
+
+**Go:**
+
+```go
+// ✓ Interfaces
+type CaptchaService interface {
+    Generate(ctx context.Context, width int, height int) (*CaptchaDto, error)
+    Validate(ctx context.Context, captchaID string, captchaX int) (bool, error)
+}
+
+// ✓ Structs as DTOs
+type CaptchaDto struct {
+    CaptchaID       string `json:"captchaId"`
+    BackgroundImage string `json:"backgroundImage"`
+    SliderImage     string `json:"sliderImage"`
+    SliderY         int    `json:"sliderY"`
+}
+```
+
+**Python:**
+
+```python
+# ✓ Protocols (structural interfaces)
+class CaptchaService(Protocol):
+    async def generate(self, width: int = 300, height: int = 150) -> CaptchaDto: ...
+    async def validate(self, captcha_id: str, captcha_x: int, tolerance_px: int = 3) -> bool: ...
+
+# ✓ Dataclasses as DTOs
+@dataclass
+class CaptchaDto:
+    captcha_id: str
+    background_image: str
+    slider_image: str
+    slider_y: int
+```
+
+#### What NOT to Write
+
+```csharp
+// ✗ Method bodies with implementation logic
+public async Task<bool> ValidateAsync(string captchaId, int captchaX, int tolerancePx)
+{
+    var session = await _store.GetAsync(captchaId);  // ← implementation
+    if (session is null) return false;
+    return Math.Abs(session.ExpectedX - captchaX) <= tolerancePx;
+}
+
+// ✗ Business logic or algorithms in full detail
+// ✗ Database access code (LINQ queries, raw SQL)
+// ✗ Complete constructors with body
+```
+
+**The test:** Could someone paste the interface into their IDE and have it compile? Yes — good. Could they paste a class and have it *work*? No — that's implementation.
 
 ### Step 4: Validate the Design
 
@@ -98,6 +191,17 @@ Before transitioning to Planning, self-check the design:
 3. **Feasibility** — Are there any known blockers?
 4. **Testability** — Can each requirement be verified?
 5. **Clarity** — Is every section written in plain, unambiguous language?
+6. **Code Density** — Run this checklist against the spec you just produced:
+
+| Check | If Missing, Add... |
+|---|---|
+| Does every module have a public interface? | `IModuleService` with full method signatures |
+| Does every API endpoint have a request/response DTO? | Record/class with typed fields |
+| Does every state machine have a corresponding enum? | `enum StateName { ... }` |
+| Does every sequence flow have pseudocode? | Key method call chain, no bodies |
+| Does error handling define error types/codes? | Error enum or `ErrorDetails` record |
+| Do security considerations reference concrete attributes/permissions? | `[Authorize]`, permission code constants |
+| Are there prose-only sections with no code at all? | Scan each section — if a section describes behavior with zero code, it's under-designed |
 
 ### Step 5: Present for Approval
 
@@ -139,10 +243,12 @@ Future impact: [How this constrains or enables future decisions]
 |---|---|
 | **Over-specifying** | Designing module internals for a system-level request |
 | **Under-specifying** | "We'll use a database" — which one? What schema? |
+| **All-prose-no-code** | Every section is tables and bullet points. No interfaces, no DTOs, no pseudocode. The implementer has to design the code from scratch — that's the AI's job. |
 | **Gold-plating** | Designing for hypothetical future needs at the cost of present simplicity |
 | **Premature optimization** | Optimizing before the design is even validated |
 | **Buzzword-driven design** | Choosing Event Sourcing because it's cool, not because it fits |
 | **Spec-as-code** | Writing so much pseudocode it becomes implementation |
+| **Copy-paste interfaces** | Duplicating the same method signature in multiple modules without explaining the contract difference |
 
 ## Transition to Planning
 
@@ -157,4 +263,4 @@ I'll now create an implementation roadmap.
 
 ## Key Mindset
 
-> A good design doesn't answer every question — it answers the right questions clearly and leaves implementation details to the implementer. If your spec reads like source code, you've gone too far. If it reads like a fortune cookie, you haven't gone far enough.
+> A good design spec is half prose, half code contracts. The prose explains why and what. The interfaces, DTOs, enums, and pseudocode define how things connect. If your spec reads like a requirements document, it's incomplete. If it reads like source code, you've gone too far. Aim for the engineer to say: "I can see exactly what to build — the types are here, the interfaces are here, I just need to fill in the bodies."
