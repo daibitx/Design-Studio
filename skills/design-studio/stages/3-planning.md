@@ -97,7 +97,9 @@ Output using `templates/implementation-plan.md`. The plan should be:
 
 When the developer confirms the plan, write it to `docs/designs/<design-name>/implementation-plan.md`. Then snapshot a copy to `docs/designs/<design-name>/history/YYYY-MM-DD-implementation-plan.md`.
 
-Update `docs/designs/INDEX.md` to reflect the new stage and status.
+**Update `docs/designs/INDEX.md`:** change this design's Stage to "Planning". Update the Updated date. If this is the final planning artifact, change Status to Complete.
+
+**Update `docs/designs/<design-name>/design-context.md`:** set Stage=Planning, Status=Complete (if done).
 
 ## Parallelism Guidance
 

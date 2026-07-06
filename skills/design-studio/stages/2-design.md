@@ -223,7 +223,9 @@ Once you're satisfied, I'll break this into an implementation plan.
 
 When the developer approves the design, write it to `docs/designs/<design-name>/design-spec.md`. Then snapshot a copy to `docs/designs/<design-name>/history/YYYY-MM-DD-design-spec.md`.
 
-Update `docs/designs/INDEX.md` to reflect the new stage and status.
+**Update `docs/designs/INDEX.md`:** change this design's Stage to "Design" (or keep "Design" if already there). Update the Updated date.
+
+**Update `docs/designs/<design-name>/design-context.md`:** set Stage=Design.
 
 ## Design Decision Documentation
 

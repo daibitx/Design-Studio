@@ -96,7 +96,9 @@ Suggestion: [Direction, not implementation. "Consider extracting X because..." n
 
 Write the report to `docs/designs/<design-name>/validation-report.md`. Snapshot to `docs/designs/<design-name>/history/YYYY-MM-DD-validation-report.md`.
 
-Update `docs/designs/INDEX.md` if this validation completes the design cycle.
+**Update `docs/designs/INDEX.md`:** if this validation completes the design cycle, move this design from Active Designs to Completed Designs. Update the Updated date.
+
+**Update `docs/designs/<design-name>/design-context.md`:** set Stage=Validation, Status=Complete.
 
 ### Step 6: Prioritize
 

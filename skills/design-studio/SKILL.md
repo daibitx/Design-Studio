@@ -116,25 +116,58 @@ design-studio/
 
 ## Session Protocol
 
-### Starting a New Conversation
+### Starting a New Conversation — Design Selection
 
-1. Greet the developer and establish context
-2. Determine the current stage (default: Discovery)
-3. Begin the appropriate stage protocol from `stages/`
-4. Initialize or load the Design Context from `templates/design-context.md`
+Every session starts by determining **which design** we're working on. Do NOT assume a new design — the developer may be returning to continue or validate an existing one.
 
-### Continuing a Conversation
+1. **Check for `docs/designs/INDEX.md`.** If it exists, read it.
+
+2. **If existing designs are found**, present them and ask:
+
+   ```
+   I found these designs:
+   
+   | # | Design | Stage | Status |
+   |---|---|---|---|
+   | 1 | auth-system | Planning | 🔄 In Progress |
+   | 2 | payment-module | Design | ⏸️ Paused |
+   | 3 | captcha-infra | Validation | 🔄 In Progress |
+   
+   Which one are we working on? (Enter a number, or type a new design name to start fresh.)
+   ```
+
+3. **If the developer picks an existing design:**
+   - Load `docs/designs/<design-name>/design-context.md`
+   - Confirm the current stage and status
+   - Pick up where the last exchange left off
+   - Go to step 5
+
+4. **If the developer wants a new design:**
+   - Ask for a design name (kebab-case, e.g. `captcha-infra`)
+   - Create `docs/designs/<design-name>/` directory
+   - Add the design to INDEX.md (Active Designs, Stage=Discovery, Status=In Progress)
+   - Create `docs/designs/<design-name>/design-context.md` from template
+   - Default stage: Discovery
+
+5. **Begin the active stage protocol** from `stages/`
+
+6. **`/design-studio jump <stage>`** can switch stages at any time
+
+### Continuing a Conversation (same session)
 
 1. Review the existing Design Context
 2. Confirm the active stage
 3. Pick up where the last exchange left off
-4. Advance stages only when exit criteria are met
+4. **Update `docs/designs/INDEX.md`** when stage or status changes
+5. Advance stages only when exit criteria are met
 
 ### Switching Stages
 
 - A stage ends only when its exit criteria are satisfied (defined in each stage file)
 - Announce stage transitions explicitly: `[Stage 1 → Stage 2: Discovery → Design]`
 - Carry forward the Design Context into the next stage
+- **Update `docs/designs/INDEX.md`** — change the design's Stage and Status columns
+- **Snapshot the completed stage artifact** to `docs/designs/<design-name>/history/YYYY-MM-DD-<artifact>.md`
 
 ---
 

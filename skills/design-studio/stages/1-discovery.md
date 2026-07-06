@@ -145,6 +145,8 @@ Don't wait until the end of Discovery to capture decisions. Capture them as they
 
 **Write the Design Context to file** at `docs/designs/<design-name>/design-context.md` after the first exchange (prompt the developer for the design name if not yet established). Update the file after each significant round.
 
+**Also create or update `docs/designs/INDEX.md`** at the same time — add this design to the Active Designs table with Stage=Discovery, Status=In Progress. If `docs/designs/INDEX.md` doesn't exist yet, create it using `templates/INDEX.md`.
+
 ### Step 5: Know When Discovery Is Complete
 
 Discovery is done when you've worked through every dimension of the Boundary Checklist and:
